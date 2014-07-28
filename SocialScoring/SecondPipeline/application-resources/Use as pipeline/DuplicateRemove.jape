@@ -1,0 +1,131 @@
+Phase: Number
+Input: Token Lookup Person Title
+Options: control= appelt
+
+
+
+// Finding the numbers. 
+
+Rule:Numbering
+Priority:80
+(
+   ({Token.string == "University"} {Token.string == "of"} {Token.kind == word}) |
+   ({Token.kind == word, Token.category == NNP , Token.orth == upperInitial}
+     ({Token.category == POS})?
+     {Token.string == "University"}
+   )|({Lookup.majorType == universityname})
+
+):NameofUni
+-->{
+
+       //   
+
+
+        AnnotationSet Nameofperson  = inputAS.get("Person") ;
+        AnnotationSet Removing  = inputAS.get("Person") ;
+      
+        ArrayList<Annotation> names = new ArrayList<Annotation>();
+        ArrayList<Integer> global = new ArrayList<Integer>();
+
+      Iterator  ii = Nameofperson.iterator();
+    
+      while(ii.hasNext()){
+           Annotation temp = (Annotation) ii.next();
+           if(temp.getFeatures().get("matches") != null){
+                ArrayList a = (ArrayList) temp.getFeatures().get("matches") ;
+              
+                  if(!global.contains(a.get(0))){
+                      global.add((int)a.get(0));
+                      names.add(temp);
+                  }
+
+           }
+
+      }
+
+         // Writing all the names
+
+
+
+         try{
+              FileWriter filewrite = new FileWriter(new File("Result\\CoreferenceNameIdendity.html"),true);
+              BufferedWriter br = new BufferedWriter(filewrite);
+
+               
+
+               File f = new File("Result\\Temp.html");
+               
+               if(f.exists()){
+
+               }else
+                f.createNewFile();
+              
+              FileReader filereader = new FileReader(f);
+              BufferedReader  br2 = new BufferedReader(filereader,5);
+
+              String Content1 = doc.getContent().toString();
+              Content1 = Content1.substring(0,5); 
+
+              boolean CHECK = false ;
+
+              String checking ;
+               if((checking = br2.readLine()) != null) {
+
+                  checking = checking.trim();
+                  int index = Content1.indexOf(checking);
+                  if(index >= 0){
+                    CHECK = true ;
+                  }
+
+                 //  System.out.println(checking);
+
+               }
+
+               if(CHECK){}
+               else{
+                  br2.close();
+                 
+                  FileWriter filewriter = new FileWriter(new File("Result\\Temp.html"));
+                  BufferedWriter br1 = new BufferedWriter(filewriter);
+                  
+                  br1.write(Content1);
+                  br1.close();
+
+               } 
+
+
+         if(CHECK == false){
+
+
+         Iterator iterator = names.iterator();
+            //  br.write("<h1>"+ doc +"</h1>");
+         while(iterator.hasNext()){
+                Annotation file = (Annotation)iterator.next();
+                String Content = doc.getContent().toString();
+           //  Content = Content.substring();
+                long start = file.getStartNode().getOffset();
+                long end = file.getEndNode().getOffset() ;
+                Content = Content.substring((int)start , (int)end);
+
+               //Content = Content.substring((int)file.getStartNode().getOffset(), (int)file.getEndNode().getOffset());
+              //  System.out.println("Temp string " + Content);
+               
+             
+                   br.write("<br>"+Content);
+               
+           }
+
+
+        }
+
+
+                //  br1.close();
+                  br2.close();
+                  br.close();
+
+            }catch(Exception e){
+
+
+            }
+
+	}

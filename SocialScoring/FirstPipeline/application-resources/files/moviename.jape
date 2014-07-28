@@ -1,0 +1,31 @@
+Phase: MovieDetect
+Input: Token Lookup
+Options: control= appelt
+
+// Finding the numbers. 
+
+Rule:SentenceDetection
+Priority:55
+( ({Token.kind == word})
+
+):Sentence
+-->{
+
+		AnnotationSet Annot = bindings.get("Sentence");
+
+		long start = Annot.firstNode().getOffset();
+		long end = Annot.lastNode().getOffset();
+
+		String content = doc.getContent().toString();
+		
+   
+    content = content.substring((int)start  , (int)end);
+     FeatureMap features1 = Factory.newFeatureMap() ;
+    features1.put("Movie", content);
+            
+
+    annotations.add(Annot.firstNode(),Annot.lastNode(),"Movie",features1);
+
+       
+
+}

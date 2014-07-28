@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
+    xmlns:xsp="http://www.owl-ontologies.com/2005/08/07/xsp.owl#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns="http://localhost/PersonLocationExtractor.owl#"
+    xmlns:sa="http://localhost/SemanticAssistants.owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:swrl="http://www.w3.org/2003/11/swrl#"
+    xmlns:cu="http://localhost/ConceptUpper.owl#"
+    xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     >
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://localhost/SemanticAssistants.owl"/>
+  </owl:Ontology>
+  <sa:NLPTool rdf:ID="PersonLocationExtractor">
+    <sa:publishAsNLPService rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</sa:publishAsNLPService>
+    <cu:hasLabel xml:lang="en">Second Pipeline</cu:hasLabel>
+	<rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Second Pipeline</rdfs:comment>
+    <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Second Pipeline</sa:hasGATEName>
+    <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#GATECorpusPipeline_Format"/>
+    <sa:appFileName xml:lang="en">../Resources/GatePipelines/SecondPipeline/application.xgapp</sa:appFileName>
+    <sa:hasInputNaturalLanguage rdf:resource="http://localhost/ConceptUpper.owl#fr"/>
+    
+    <sa:hasOutputNaturalLanguage rdf:resource="http://localhost/ConceptUpper.owl#fr"/>
+  
+    <rdf:type rdf:resource="http://localhost/SemanticAssistants.owl#GATEPipeline"/>
+  </sa:NLPTool>
+</rdf:RDF>
+
+<!-- Created with Protege (with OWL Plugin 3.4, Build 533)  http://protege.stanford.edu -->

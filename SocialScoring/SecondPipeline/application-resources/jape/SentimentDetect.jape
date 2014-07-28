@@ -1,0 +1,65 @@
+Phase: SentimentDetect
+Input: Token Lookup Tweet
+Options: control= appelt
+
+// Finding the numbers. 
+
+Rule:SentimentDetection
+Priority:55
+( ({Lookup.majorType == "NegativeSentiment"}):negative
+  |
+  ({Lookup.majorType == "PositiveSentiment"}):positive
+
+):Sentiment
+-->{
+
+    boolean negativecheck = true ;
+    System.out.println("Matched");
+    
+
+    AnnotationSet Annot = bindings.get("negative");
+    if(Annot == null){
+      Annot = bindings.get("positive");
+      negativecheck = false;
+    }
+
+    long start = Annot.firstNode().getOffset();
+    long end = Annot.lastNode().getOffset();
+
+    String content = doc.getContent().toString();
+    
+   
+    content = content.substring((int)start  , (int)end);
+     FeatureMap features1 = Factory.newFeatureMap() ;
+
+    if(negativecheck == false)
+    features1.put("Sentiment", "PositiveSentiment");
+    else
+    features1.put("Sentiment", "NegativeSentiment");
+            
+
+    annotations.add(Annot.firstNode(),Annot.lastNode(),"Sentiment",features1);
+
+    
+     List annList = new ArrayList((AnnotationSet)inputAS.get("Tweet"));
+    Collections.sort(annList, new OffsetComparator());
+
+    System.out.println("Annotation List" + annList);
+    
+    Iterator ite = annList.iterator();
+    while(ite.hasNext()){
+      Annotation annot = (Annotation)ite.next();
+      long starting = annot.getStartNode().getOffset();
+      long ending = annot.getEndNode().getOffset();
+        if(start >= starting && start <= ending ){
+
+          System.out.println("Came Here" +start +"  "+ starting + "  " +ending);
+          System.out.println(annot.getFeatures());
+          annot.getFeatures().put("ContainValue" , "true");
+          break;
+        }
+
+    }
+
+
+}

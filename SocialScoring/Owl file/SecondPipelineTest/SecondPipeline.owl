@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
+    xmlns:xsp="http://www.owl-ontologies.com/2005/08/07/xsp.owl#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns="http://localhost/PersonLocationExtractor.owl#"
+    xmlns:sa="http://localhost/SemanticAssistants.owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:swrl="http://www.w3.org/2003/11/swrl#"
+    xmlns:cu="http://localhost/ConceptUpper.owl#"
+    xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     >
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://localhost/SemanticAssistants.owl"/>
+  </owl:Ontology>
+  <sa:NLPTool rdf:ID="PersonLocationExtractor">
+    <sa:publishAsNLPService rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</sa:publishAsNLPService>
+    <cu:hasLabel xml:lang="en">Second Pipeline</cu:hasLabel>
+	<rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Second Pipeline</rdfs:comment>
+    <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Second Pipeline</sa:hasGATEName>
+    <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#GATECorpusPipeline_Format"/>
+    <sa:appFileName xml:lang="en">../Resources/GatePipelines/SecondPipeline/application.xgapp</sa:appFileName>
+    <sa:hasInputNaturalLanguage rdf:resource="http://localhost/ConceptUpper.owl#fr"/>
+     <cu:producesOutput>
+	 	  <sa:GATE_OutputArtifact rdf:ID="Tweet">
+        <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Tweet</sa:hasGATEName>
+        <cu:isProducedBy rdf:resource="#PersonLocationExtractor"/>
+        <sa:isPerDocument rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</sa:isPerDocument>
+        <cu:isActualArtifact>
+          <sa:GATEAnnotation rdf:ID="Tweet">
+            <sa:hasFeature xml:lang="en">rate</sa:hasFeature>
+            <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Tweet</sa:hasGATEName>
+            <sa:isInAnnotationSet xml:lang="en"></sa:isInAnnotationSet>
+            <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATEAnnotation_Format"/>
+          </sa:GATEAnnotation>
+        </cu:isActualArtifact>
+        <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATEAnnotation_Format"/>
+      </sa:GATE_OutputArtifact>
+	  
+	 
+	 
+	 </cu:producesOutput>
+   
+   
+	<cu:producesOutput>
+	   <sa:GATE_OutputArtifact rdf:ID="UserTag">
+        <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >UserTag</sa:hasGATEName>
+        <cu:isProducedBy rdf:resource="#PersonLocationExtractor"/>
+        <sa:isPerDocument rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</sa:isPerDocument>
+        <cu:isActualArtifact>
+          <sa:GATEAnnotation rdf:ID="UserTag">
+            <sa:hasFeature xml:lang="en">UserTag</sa:hasFeature>
+            <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >UserTag</sa:hasGATEName>
+            <sa:isInAnnotationSet xml:lang="en"></sa:isInAnnotationSet>
+            <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATEAnnotation_Format"/>
+          </sa:GATEAnnotation>
+        </cu:isActualArtifact>
+        <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATEAnnotation_Format"/>
+      </sa:GATE_OutputArtifact>
+	   </cu:producesOutput>
+	
+	
+	<cu:producesOutput>
+	   <sa:GATE_OutputArtifact rdf:ID="HashTag">
+        <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >HashTag</sa:hasGATEName>
+        <cu:isProducedBy rdf:resource="#PersonLocationExtractor"/>
+        <sa:isPerDocument rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</sa:isPerDocument>
+        <cu:isActualArtifact>
+          <sa:GATEAnnotation rdf:ID="HashTag">
+            <sa:hasFeature xml:lang="en">HashTag</sa:hasFeature>
+            <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >HashTag</sa:hasGATEName>
+            <sa:isInAnnotationSet xml:lang="en"></sa:isInAnnotationSet>
+            <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATEAnnotation_Format"/>
+          </sa:GATEAnnotation>
+        </cu:isActualArtifact>
+        <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATEAnnotation_Format"/>
+      </sa:GATE_OutputArtifact>
+	  
+	   
+	 
+	 
+	 </cu:producesOutput>
+		
+	<cu:producesOutput>
+      <sa:GATE_OutputArtifact rdf:ID="Sentiment">
+        <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Sentiment</sa:hasGATEName>
+        <cu:isProducedBy rdf:resource="#PersonLocationExtractor"/>
+        <sa:isPerDocument rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</sa:isPerDocument>
+        <cu:isActualArtifact>
+          <sa:GATEAnnotation rdf:ID="Sentiment">
+            <sa:hasFeature xml:lang="en">Sentiment</sa:hasFeature>
+            <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Sentiment</sa:hasGATEName>
+            <sa:isInAnnotationSet xml:lang="en"></sa:isInAnnotationSet>
+            <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATEAnnotation_Format"/>
+          </sa:GATEAnnotation>
+        </cu:isActualArtifact>
+        <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATEAnnotation_Format"/>
+      </sa:GATE_OutputArtifact>
+	   
+	  
+    </cu:producesOutput>
+    <sa:hasOutputNaturalLanguage rdf:resource="http://localhost/ConceptUpper.owl#fr"/>
+  
+    <rdf:type rdf:resource="http://localhost/SemanticAssistants.owl#GATEPipeline"/>
+  </sa:NLPTool>
+</rdf:RDF>
+
+<!-- Created with Protege (with OWL Plugin 3.4, Build 533)  http://protege.stanford.edu -->

@@ -1,0 +1,21 @@
+<!-- creole.xml GoldFish -->
+<!--  Ricardo KAKA, 7/3/2014 -->
+
+<!--
+This file just references the JAR file that contains the compiled resource.
+Configuration is contained in the @CreoleResource annotation on 
+sheffield.creole.goldfish.GoldFish.
+-->
+
+
+<CREOLE-DIRECTORY>
+
+<CREOLE>
+  <RESOURCE>
+    <NAME>GoldFish</NAME>
+    <JAR>GoldFish.jar</JAR>
+    <CLASS>sheffield.creole.goldfish.GoldFish</CLASS>
+  </RESOURCE>
+</CREOLE>
+
+</CREOLE-DIRECTORY>

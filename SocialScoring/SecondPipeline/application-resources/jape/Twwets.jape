@@ -1,0 +1,34 @@
+Phase: SentenceDetect
+Input: Token Lookup
+Options: control= appelt
+
+// Finding the numbers. 
+
+Rule:SentenceDetection
+Priority:55
+( {Token.string == "["}
+  ({Token ,!Token.string == "]"})* :Tika
+  {Token.string == "]"}
+
+):Sentence
+-->{
+
+    System.out.println("Matched");
+		AnnotationSet Annot = bindings.get("Tika");
+
+		long start = Annot.firstNode().getOffset();
+		long end = Annot.lastNode().getOffset();
+
+		String content = doc.getContent().toString();
+		
+   
+    content = content.substring((int)start  , (int)end);
+     FeatureMap features1 = Factory.newFeatureMap() ;
+    features1.put("Tweet", content);
+            
+
+    annotations.add(Annot.firstNode(),Annot.lastNode(),"Tweet",features1);
+
+       
+
+}

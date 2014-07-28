@@ -1,0 +1,43 @@
+Phase: HashTag
+Input: Token Lookup
+Options: control= appelt
+
+// Finding the numbers. 
+
+Rule:SentenceDetection
+Priority:55
+( 
+  ({Token.kind == punctuation, Token.string == "@"}{Token}):userTag
+  |
+  ({Token.kind == punctuation, Token.string == "#"}{Token}):hashTag
+
+):HashTagging
+-->{
+
+    
+    FeatureMap features1 = Factory.newFeatureMap() ;
+    if(bindings.get("hashTag") != null){
+        AnnotationSet Annot = bindings.get("hashTag") ;
+        long start = Annot.firstNode().getOffset();
+        long end = Annot.lastNode().getOffset();
+
+        String content = doc.getContent().toString();
+        content = content.substring((int)start  , (int)end);
+        features1.put("HashTag", content);
+        annotations.add(Annot.firstNode(),Annot.lastNode(),"HashTag",features1);
+    
+    }else if(bindings.get("userTag") != null){
+
+
+        AnnotationSet Annot = bindings.get("userTag") ;
+        long start = Annot.firstNode().getOffset();
+        long end = Annot.lastNode().getOffset();
+
+        String content = doc.getContent().toString();
+        content = content.substring((int)start  , (int)end);
+        features1.put("UserTag", content);
+        annotations.add(Annot.firstNode(),Annot.lastNode(),"UserTag",features1);
+
+    }
+
+}

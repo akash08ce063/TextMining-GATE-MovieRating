@@ -1,0 +1,86 @@
+Phase: Numberr
+Input: Token Lookup
+Options: control= appelt
+
+// Finding the numbers. 
+
+
+// But take care that if you wanted to use question mark sign always use it after rounded curly braces
+
+Rule:Numberingg
+Priority:55
+(
+	(
+		{Token.string == "Department"} |
+		{Token.string == "Faculty"}|
+		{Token.string == "School"}|
+		{Token.string == "Division"}
+
+	)
+
+	 ({Token.string == "of"})
+
+	(	
+ 		(
+ 		  {Token.kind == word, Token.category == NNP, Token.orth == upperInitial}
+ 		  |
+ 		  {Token.kind == word, Token.category == NNPS, Token.orth == upperInitial}	
+
+ 		)
+
+ 		(	
+ 		
+ 		{Token.kind == word, Token.category == NNP, Token.orth == upperInitial}	
+ 	
+		)?	
+ 	
+	)
+	({Token.string == "and"})?
+	
+	
+	(
+		(
+ 		  {Token.kind == word, Token.category == NNP, Token.orth == upperInitial}
+ 		  |
+ 		  {Token.kind == word, Token.category == NNPS, Token.orth == upperInitial}	
+
+ 		)
+
+ 		(	
+ 		
+ 		{Token.kind == word, Token.category == NNP, Token.orth == upperInitial}	
+ 	
+		)?	
+
+    )?
+		
+
+
+):Uniposn
+--> {
+		AnnotationSet Annot = bindings.get("Uniposn");
+
+		long start = Annot.firstNode().getOffset();
+		long end = Annot.lastNode().getOffset();
+
+		String content = doc.getContent().toString();
+		content = content.substring((int)start, (int)(end ));
+
+        FeatureMap features1 = Factory.newFeatureMap() ;
+        features1.put("OrgUnit", content);
+            
+        annotations.add(Annot.firstNode(),Annot.lastNode(),"OrganizationalUnit",features1);
+             try{
+              FileWriter filewrite = new FileWriter(new File("Result\\UniPos.html"),true);
+              BufferedWriter br = new BufferedWriter(filewrite);
+              br.write("<br>"+content);
+			  br.close();
+
+			}catch(Exception e){
+
+			}
+
+
+
+
+}

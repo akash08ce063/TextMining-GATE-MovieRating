@@ -1,0 +1,124 @@
+Phase: Number
+Input: Token Lookup Person Title Naming
+Options: control= appelt
+
+// Finding the numbers. 
+
+Rule:Numbering
+Priority:80
+(
+
+   {Token.category == PRP}
+
+):NameofUni
+-->{
+	
+          
+            AnnotationSet Nameofperson  = inputAS.get("Naming") ; 
+            AnnotationSet Annot = bindings.get("NameofUni");
+
+        //    System.out.println("Each and Every Annotation : " + Annot);
+            List<Annotation> tokens = new ArrayList<Annotation>(Nameofperson);  
+  //if no tokens to match, do nothing  
+            if (tokens.isEmpty())  
+              return;  
+            Collections.sort(tokens, new gate.util.OffsetComparator());  
+ 
+           // System.out.println(tokens.size());
+
+
+            Iterator iterating = Annot.iterator();
+            
+            Annotation annotation = null ; 
+            while(iterating.hasNext()){
+              annotation = (Annotation) iterating.next();
+            }
+
+
+
+
+
+            if(annotation != null){
+            long offset = annotation.getStartNode().getOffset();            
+
+            Iterator ite = tokens.iterator();
+            
+            boolean stop = false ; 
+            Annotation match = null ; 
+            Annotation prev = null ; 
+            
+            while(ite.hasNext() ){
+                  match = (Annotation)ite.next();
+                  long pos = match.getStartNode().getOffset();
+              //    System.out.println("The Offset of Pronoun : "+ offset) ;
+
+              //    System.out.println("The Offset of Name : "+ pos) ;
+                  
+
+                  if(stop == true)
+                      break;
+
+                  if(stop == false){
+                  if((offset - pos)< 0){
+                      stop = true;
+
+                  }else{
+                    prev = match ;
+                  }
+                 } 
+               
+            }
+
+             if(stop == true){
+            
+                match = prev ; 
+             }
+
+
+         //   System.out.println("Previous" + prev);
+
+
+
+
+            if(match != null){
+            long start = match.getStartNode().getOffset() ; 
+            long end =   match.getEndNode().getOffset() ; 
+
+            String content = doc.getContent().toString();
+            content = content.substring((int)start,(int)end);
+
+         //  System.out.println( "Matching Annotation " + content);
+
+            FeatureMap features1 = Factory.newFeatureMap() ;
+            features1.put("person", content);
+              
+
+            annotations.add(Annot.firstNode(), Annot.lastNode(),"Coreference",features1);
+            
+             
+
+            }
+          }
+      
+
+
+
+
+
+//          AnnotationSet titletoken  = inputAS.get("NameofPerson");
+
+
+  //        AnnotationSet Annot = bindings.get("NameofUni");
+    //       Annotation annotation = (Annotation) Annot.iterator().next();
+      //    long offset = annotation.getStartNode().getOffset();
+
+        //  long off = titletoken.firstNode().getOffset();
+
+          //if((offset - off) < 70){
+            //  System.out.println("Relation i find out ");
+
+          //}
+
+
+	
+  }

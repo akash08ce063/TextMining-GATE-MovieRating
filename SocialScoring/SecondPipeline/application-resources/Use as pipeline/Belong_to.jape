@@ -1,0 +1,232 @@
+Phase: Belong
+Input: Token Lookup Person Title Naming Coreference 
+Options: control= appelt
+
+// Finding the numbers. 
+
+Rule:Belonging
+Priority:80
+(
+
+({Token.string == "University"} {Token.string == "of"} {Token.kind == word}) |
+ ({Token.kind == word, Token.category == NNP , Token.orth == upperInitial}
+  ({Token.category == POS})?
+  {Token.string == "University"}
+ )|({Lookup.majorType == universityname})
+
+):Belong
+-->{
+		
+		AnnotationSet bindAnnot =bindings.get("Belong");
+ 		AnnotationSet nameAnnot = inputAS.get("Naming");
+ 		// Sorting 
+ 		List<Annotation> nameAnnot1 = new ArrayList<Annotation>(nameAnnot);  
+   		Collections.sort(nameAnnot1, new gate.util.OffsetComparator()); 
+ 		AnnotationSet pronounAnnot = inputAS.get("Coreference");
+
+
+ 		List<Annotation> pronounAnnot1 = new ArrayList<Annotation>(pronounAnnot);  
+   
+  		
+  		Collections.sort(pronounAnnot1, new gate.util.OffsetComparator()); 
+
+
+
+		long Unioffset = bindAnnot.firstNode().getOffset();
+		
+	//	System.out.println(" Belonging" + Unioffset + "Size" + pronounAnnot.size() );
+
+	//	Find the pronoun nearest means surrounded by 70 characters.
+		
+		Iterator ite = pronounAnnot1.iterator();
+
+		boolean stop = false ;
+		Annotation ProAnnot = null;
+		Annotation PrevAnnot = null ;
+		while(ite.hasNext()){
+			ProAnnot = (Annotation)ite.next();
+			long pos = ProAnnot.getStartNode().getOffset();
+
+
+		//	System.out.println(" Belonging" + pos );
+
+
+ /// ----------------- here
+			if(stop == true)
+				break;
+
+			if(stop == false){
+			if((Unioffset - pos) < 0){
+				stop = true ;
+
+			}else{
+				PrevAnnot = ProAnnot ;
+
+            }
+			}
+
+		}
+
+		if(stop == true){
+			ProAnnot = PrevAnnot ;
+		}
+
+		// If matched pronoun and University are near in proximity of 70 character, Then more 
+		// Possibility that that is the only Guy. 
+		// If University name and pronoun is very near by then it is ok. otherwise i search for
+		// name which is near by to the word. 
+		
+		boolean goloop = false ; 
+
+		if(ProAnnot != null)
+		 	goloop = true ;
+
+
+		
+		
+		// we compare the offset and whomever is nearby then take it
+		// We have pronoun thing already
+		// Make a few changes into Name thing. 
+		
+
+		
+		
+		
+		
+		
+		boolean Pronounloop = false;
+		
+		
+		
+
+		if(  (goloop == true ) && ((Unioffset - ProAnnot.getStartNode().getOffset()) < 130) ){
+			// The simply put pronoun thing
+			 //  System.out.println("Possibility of pronoun"); 
+			   Pronounloop = true;
+
+		}
+		
+		/////////
+		String Content = "";
+		Annotation NameAnnotation = null ; 
+		Annotation Previous = null ;
+		boolean nameloop = false ;
+		if(nameAnnot1.size() != 0){
+			boolean stoping = false ; 
+			
+			Iterator listtoiterate = nameAnnot1.iterator();
+			while(listtoiterate.hasNext()){
+  				NameAnnotation= (Annotation)listtoiterate.next();
+  				long checkpos = NameAnnotation.getStartNode().getOffset() ;
+  				long Endingoff = NameAnnotation.getEndNode().getOffset() ;
+
+  				/// ------- here
+  				if(stoping == true)
+  					break ;
+  					if(stoping == false){
+						if((Unioffset - checkpos) < 0  || (Endingoff > Unioffset )){
+							stoping = true ;
+
+						}else{
+							Previous = NameAnnotation ;
+
+            			}
+					}
+					
+  			}
+
+  			if(stoping == true){
+  				NameAnnotation = Previous ;
+  			}
+
+  			if(NameAnnotation != null ){
+  					long finalpos = NameAnnotation.getStartNode().getOffset();
+  					long finalpos1 = NameAnnotation.getEndNode().getOffset() ;
+  					if((Unioffset - finalpos1) < 130){
+  							 nameloop = true ;
+  							 long Endpos = NameAnnotation.getEndNode().getOffset();
+  							 Content = doc.getContent().toString();
+  							 Content = Content.substring((int)finalpos,(int)Endpos);
+  					//		 System.out.println("Possibility of Name"); 
+
+  					}
+			}
+
+			
+		}
+
+			  try{
+              FileWriter filewrite = new FileWriter(new File("Result\\Belong_to.html"),true);
+              BufferedWriter br = new BufferedWriter(filewrite);
+
+              long startPos = bindAnnot.firstNode().getOffset();
+              long endPos = bindAnnot.lastNode().getOffset();
+
+              String data =doc.getContent().toString();
+              data = data.substring((int)startPos,(int)endPos);
+
+
+		   FeatureMap features1 = Factory.newFeatureMap() ;
+			
+		   if(Pronounloop == true && nameloop == true){
+				// Then compare the offset and decide who wins
+
+				 // System.out.println("Both rules has been matched");
+
+				long nameoffset = NameAnnotation.getStartNode().getOffset() ;
+				long prooffset = ProAnnot.getStartNode().getOffset() ;
+				
+				if((Unioffset - nameoffset ) > (Unioffset- prooffset)){
+					String NameofProf = (String)ProAnnot.getFeatures().get("person");
+					features1.put("dom", NameofProf);
+					features1.put("ran",data);
+					
+					annotations.add(bindAnnot.firstNode(),bindAnnot.lastNode(),"Belong to",features1);
+
+					br.write("<br>"+NameofProf+" is related to "+ data);
+		
+				}else{
+				
+					features1.put("dom", Content);
+					features1.put("ran", data);
+					annotations.add(bindAnnot.firstNode(),bindAnnot.lastNode(),"Belong to",features1);
+					br.write("<br>"+Content+" is related to "+ data);
+				}
+				
+			}else{
+					/// find which is true so put condition according to.
+				if(nameloop == true){
+
+				 //	 tem.out.println("Naming Possibility");
+
+					features1.put("dom", Content);
+					features1.put("ran",data);
+					annotations.add(bindAnnot.firstNode(),bindAnnot.lastNode(),"Belong to",features1);
+					br.write("<br>"+Content+" is related to "+ data);
+
+				}else if(Pronounloop == true){
+					String NameofProf = (String)ProAnnot.getFeatures().get("person");
+					features1.put("dom", NameofProf);
+					features1.put("ran",data);
+					annotations.add(bindAnnot.firstNode(),bindAnnot.lastNode(),"Belong to",features1);
+					br.write("<br>"+NameofProf+" is related to "+ data);
+				//	System.out.println("Pronoun has been matched");
+
+				}else{
+					
+				 //	System.out.println("Nothing Has been Matched.");
+					
+				}
+				
+			}
+
+			br.close();
+		 }catch(Exception e){
+
+
+		 }
+		
+
+}
+
+

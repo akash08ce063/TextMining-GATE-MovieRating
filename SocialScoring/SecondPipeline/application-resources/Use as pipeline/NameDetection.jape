@@ -1,0 +1,49 @@
+Phase: NameDetection
+Input: Token Lookup Person Title
+Options: control= appelt
+
+// Finding the numbers. 
+
+Rule:NameDetecting
+Priority:80
+(
+
+	
+   ((   ({Title})?
+   
+  	 {Token.category == NNP, Token.orth == upperInitial , Token.kind == word}
+     ({Token.length == 1})
+     ({Token.kind == punctuation})
+     {Token.category == NNP, Token.orth == upperInitial , Token.kind == word}
+       
+   )|({Person}))  
+
+):Nameofperson
+-->
+{
+	
+
+		AnnotationSet Annot = bindings.get("Nameofperson");
+
+		long start = Annot.firstNode().getOffset();
+		long end = Annot.lastNode().getOffset();
+
+		String content = doc.getContent().toString();
+		content = content.substring((int)start, (int)(end ));
+
+        FeatureMap features1 = Factory.newFeatureMap() ;
+        features1.put("NameofPerson", content);
+            
+        annotations.add(Annot.firstNode(),Annot.lastNode(),"Naming",features1);
+             try{
+              FileWriter filewrite = new FileWriter(new File("Result\\NameIdendity.html"),true);
+              BufferedWriter br = new BufferedWriter(filewrite);
+              br.write("<br>"+content);
+			  br.close();
+
+			}catch(Exception e){
+
+			}
+}
+
+	

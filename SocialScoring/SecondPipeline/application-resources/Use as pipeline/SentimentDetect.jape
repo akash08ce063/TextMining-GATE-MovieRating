@@ -1,0 +1,41 @@
+Phase: SentimentDetect
+Input: Token Lookup
+Options: control= appelt
+
+// Finding the numbers. 
+
+Rule:SentimentDetection
+Priority:55
+( ({Lookup.majorType == "NegativeSentiment"}):negative
+  |
+  ({Lookup.majorType == "PositiveSentiment"}):positive
+
+):Sentiment
+-->{
+
+    boolean negativecheck = true ;
+    System.out.println("Matched");
+		AnnotationSet Annot = bindings.get("negative");
+    if(Annot == null){
+      Annot = bindings.get("positive");
+      negativecheck = false;
+    }
+
+		long start = Annot.firstNode().getOffset();
+		long end = Annot.lastNode().getOffset();
+
+		String content = doc.getContent().toString();
+		
+   
+    content = content.substring((int)start  , (int)end);
+     FeatureMap features1 = Factory.newFeatureMap() ;
+
+    if(negativecheck == false)
+    features1.put("Sentiment", "PositiveSentiment");
+    else
+    features1.put("Sentiment", "NegativeSentiment");
+            
+
+    annotations.add(Annot.firstNode(),Annot.lastNode(),"Sentiment",features1);
+
+}

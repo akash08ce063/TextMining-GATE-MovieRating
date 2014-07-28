@@ -1,0 +1,26 @@
+<!-- creole.xml SimpleTest -->
+<!--  Ricardo KAKA, 7/3/2014 -->
+
+<!--
+This file just references the JAR file that contains the compiled resource.
+Configuration is contained in the @CreoleResource annotation on 
+sheffield.creole.simpletest.SimpleTest.
+-->
+
+<CREOLE-DIRECTORY>
+ <CREOLE>
+  <RESOURCE>
+    <NAME>SimpleTest</NAME>
+    <JAR>SimpleTest.jar</JAR>
+   
+    <CLASS>sheffield.creole.simpletest.SimpleTest</CLASS>
+    <JAR>lib/twitter4j-async-3.0.5.jar</JAR>
+    <JAR>lib/twitter4j-stream-3.0.5.jar</JAR>
+    <JAR>lib/twitter4j-media-support-3.0.5.jar</JAR>  
+    <JAR>lib/twitter4j-core-3.0.5.jar</JAR>
+  
+  </RESOURCE>
+
+</CREOLE>
+
+</CREOLE-DIRECTORY>
